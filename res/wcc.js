@@ -1,5 +1,14 @@
+/**
+ * @preserve Copyright 2014+, Jixun.Org
+ * WeiChunCai Plugin for WordPress:
+ *   https://github.com/JixunMoe/my-chuncai-wp
+ */
+
 // wcc.js
 ;jQuery (function ($) {
+	// Change to false when release to public.
+	var DEBUG = true;
+
 	var w = window;
 	var jx_wcc = w.jx_wcc;
 	var localStorage = w.localStorage;
@@ -98,15 +107,13 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 	var newDiv  = '<div>',
 		newLink = '<a>';
 
-	var wcc = $(newDiv).addClass('jx_wcc');
-
 	var rand = function (a, b, m) {
 		return (m || 1) * ((Math.random() * (b - a)) + a);
 	};
 
 	var getRanArr = function (arr) { return arr[Math.floor(Math.random() * arr.length)]; };
 	var clsWCC = function (opts) {
-		console.log (opts);
+		DEBUG && console.log (opts);
 		var conf = opts.c;
 		var _getBody = function () {
 			if (opts.wcc_enable.indexOf(conf.body) !== -1)
@@ -121,11 +128,32 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			})(opts.wcc_enable);
 		};
 		// 首先, 读取设定
-		var wccName = _getBody(),
+		var wccName, _wcc;
+
+		var _bootup = function () {
+			_shutdown (); // Clean up
+			DEBUG && console.log ('Booting up...');
+			// Shoukan btn
+			_btn_shoukan.stop().fadeOut (600);
+			_main.fadeIn ();
+
+			wccName = _getBody();
 			_wcc    = opts.wcc[wccName];
+
+			_hideMenu ();
+			_reloadFace (true);
+		};
+		var _shutdown = function (spd) {
+			DEBUG && console.log ('Shutting down...');
+			_main.hide ();
+			clearTimeout (_expThread);
+			clearTimeout (_thdReloadFace);
+			_btn_shoukan.stop().fadeIn (600);
+		};
 
 		var _save = function () {
 			localStorage.jx_wcc_conf = JSON.stringify(conf);
+			DEBUG && console.log ('Save config: %s', localStorage.jx_wcc_conf);
 		};
 		var _curFace = 0;
 		// 随机抽取一只表情
@@ -138,6 +166,11 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		var _main = $(newDiv).appendTo('body').addClass('jx_wcc_main').css({
 			left: conf.pos.x,
 			top:  conf.pos.y
+		});
+		var _btn_shoukan = $(newLink).appendTo('body').addClass('jx_wcc_btn_shoukan').text('召唤春菜').hide().click(function () {
+			_bootup ();
+			conf.hide = false;
+			_save ();
 		});
 
 		var _face = $(newDiv).appendTo(_main).addClass ('jx_wcc_face');
@@ -153,12 +186,31 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		var _hideMenu = function (bKeepDelay) {
 			if (!bKeepDelay) _extendDelay = 0;
 
-			_menu.stop().slideUp();
-			_menu_feedPlay.stop().slideUp();
-			_menu_change.stop().slideUp();
+			_menu
+				.add(_menu_links)
+				.add(_menu_feedPlay)
+				.add(_menu_change)
+					.stop().slideUp();
 		};
 
-		var _shoukanBtn = $(newLink).text();
+		var _shoukanBtn   = $(newLink).text();
+		var _closeChunCai = function () {
+			_hideMenu ();
+			_setDelay (10000);
+			// Save [HIDE] state of ChunCai
+			conf.hide = true;
+			_save();
+			doTypeWords ('记得再叫我出来哦~', function () {
+				setTimeout (function () {
+					$(_main).fadeOut (600, function () {
+						// Now display the button
+						_shutdown ();
+						conf.hide = true;
+						_save();
+					});
+				}, 2000);
+			});
+		};
 
 		var _menus = [
 			$(newLink).text('显示公告').click(function () {
@@ -177,9 +229,9 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			}),
 			$(newLink).text('拍打喂食').click(function () {
 				// TODO
+				_addDelay(15000);
 				doTypeWords('要来点什么呢~');
 				_menu.slideToggle ();
-				_addDelay(15000);
 				_menu_feedPlay.slideToggle ();
 			}),
 			$(newLink).text('换 一 只').click(function () {
@@ -187,17 +239,12 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 				doTypeWords ('你想要哪一只呢?');
 				_menu_change.slideDown ();
 			}),
-			$(newLink).text('关闭春菜').click(function () {
+			$(newLink).text('传 送 门').click(function () {
+				_addDelay(15000);
 				_hideMenu ();
-				_setDelay (10000);
-				doTypeWords ('记得叫我出来哦~', function () {
-					setTimeout (function () {
-						$(_main).fadeOut (600, function () {
-
-						});
-					}, 2000);
-				});
+				_menu_links.slideDown ();
 			}),
+			$(newLink).text('关闭春菜').click(_closeChunCai),
 			$(newLink).text('返回').click(function () {
 				// 强制刷新
 				_reloadChat (true);
@@ -221,6 +268,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		var _menu_feedPlay = $(newDiv).appendTo(_chat).addClass('jx_wcc_chat_m').hide().clickEx('a', function () {
 			// 当链接(食物)被点击
 			// 检查春菜的肚子实现不同回应。
+			_addDelay(3000);
 			
 			var pre = '';
 			if (_feedCount > 9) {
@@ -236,8 +284,12 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			doTypeWords((pre + ' ' + $(this).attr('r')).trim());
 		});
 		var _menu_change = $(newDiv).appendTo(_chat).addClass('jx_wcc_chat_m').hide().clickEx('a', function () {
-			console.log (this);
+			conf.body = $(this).attr('m');
+			_save ();
+			_bootup ();
 		});
+		var _menu_links = $(newDiv).appendTo(_chat).addClass('jx_wcc_chat_m').hide();
+
 		var _chatLock = false;
 		var _menu_btn = $(newDiv).appendTo(_chat).click(function () {
 			// Menu Button click event
@@ -259,7 +311,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		var _exp  = $('<img>').appendTo (_face).hide();
 
 		var _drag = new jDrag (_face[0], _main[0], null, function (newPos) {
-			console.log ('Save new pos:', newPos);
+			DEBUG && console.log ('Save new pos:', newPos);
 			conf.pos = newPos;
 			_save ();
 		});
@@ -275,7 +327,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		};
 		var imgCache = {};
 		var getImgSize = function (srcImg, cb) {
-			if (imgCache[srcImg]) {
+			if (imgCache[srcImg] && imgCache[srcImg].h) {
 				cb (imgCache[srcImg], srcImg);
 				return ;
 			}
@@ -294,7 +346,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
     
 		var __typeClass = 'jx-jqfx-type';
 		var doTypeWords = function (str, cb, delay) {
-			console.log ('doTypeWords: %s', str);
+			DEBUG && console.log ('doTypeWords: %s', str);
 			// Destory previous session if present.
 			clearTimeout (_chat_content.data(__typeClass));
 
@@ -374,9 +426,9 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		var _reloadFace = function (bForce) {
 			// Remove old thread if there is any.
 			clearTimeout (_thdReloadFace);
-			// console.log('_extendDelay: %s', _extendDelay);
+			DEBUG && console.log('_extendDelay: %s', _extendDelay);
 			if (!bForce && _extendDelay) {
-				setTimeout(_reloadFace, _extendDelay);
+				_thdReloadFace = setTimeout(_reloadFace, _extendDelay);
 				_extendDelay = 0;
 				return;
 			}
@@ -386,6 +438,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			_reFace ();
 			_hasExpression = typeof _curFace != 'string';
 			clearTimeout (_expThread);
+			_exp.hide ();
 
 			if (_hasExpression) {
 				_expIndex = 0;
@@ -415,11 +468,22 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			_menu_change.append($(newLink).text(opts.wcc[opts.wcc_enable[i]].name).attr('m', opts.wcc_enable[i]));
 		}
 
+		// 初始化友情链接
+		for (var x in opts.favLink) {
+			_menu_links.append($(newLink).text(x).attr('href', opts.favLink[x]));
+		}
+
+		_bootup ();
+
 		// 清理饥饿度
 		_feedClrThd ();
 
 		// 重载人偶
 		_reloadFace ();
+
+		if (conf.hide)
+			_shutdown (true);
+
 		//:EOF
 	};
 
@@ -437,7 +501,8 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			pos: {
 				x: $(w).width()  - 120,
 				y: $(w).height() - 200
-			}
+			},
+			hide: false
 		}}, r));
 	});
 });

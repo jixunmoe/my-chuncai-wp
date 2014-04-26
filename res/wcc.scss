@@ -1,0 +1,112 @@
+/* wcc.scss */
+
+// Get the colours defined here.
+$boxBorderColor: rgb(255, 90, 119);
+$boxBackground : rgb(255, 255, 238);
+
+// 关闭春菜后的召唤按钮
+.jx_wcc_btn_shoukan {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	padding: 1px .7em;
+	margin: .5em .75em;
+	border: 1px solid $boxBorderColor;
+	border-radius: 3px;
+	background: $boxBackground;
+	font-size: small;
+	cursor: pointer;
+}
+
+// 总节点
+.jx_wcc_main {
+	opacity: 0.85;
+	position: fixed;
+	z-index: 99999;
+	height: 150px;
+	width: 80px;
+	top: 0;
+	left: 15em;
+
+	// 人偶
+	> .jx_wcc_face {
+		position: relative;
+	}
+
+	// 菜单按钮
+	> .jx_wcc_chat {
+		width: 16em;
+		position: absolute;
+		top: 0px;
+		left: -210px;
+		border: 1px solid $boxBorderColor;
+		border-radius: 4px;
+		background: $boxBackground;
+		font-size:12px;
+
+		// 聊天内容默认 padding: 左右突出 半个文字的长度
+		> * {
+			padding: 0 .5em;
+		}
+
+		// 让空链接看上去能点
+		a {
+			cursor: pointer;
+		}
+		// Menu
+		> .jx_wcc_ment_btn {
+			cursor: pointer;
+			text-align: right;
+			padding: 0 0.3em 2px;
+			color: $boxBorderColor;
+			font-family: monospace;
+
+			// 绘制左边和右边的两条线
+			&::after,
+			&::before {
+				content: '';
+				padding: 0 .2em;
+				border: solid $boxBorderColor;
+				border-width: 0 0 0 1px;
+			}
+
+			&::after {
+				border-width: 0 1px 0 0;
+			}
+
+		}
+
+		// 菜单项目
+		> .jx_wcc_chat_m > a {
+			box-sizing: border-box;
+			display: inline-block;
+			width: 50%;
+			text-align: center;
+		}
+
+		// 显示消息的地方
+		> .jx_wcc_cat_con {
+			color: gray;
+			padding: .5em;
+			min-height: 2em;
+			word-wrap: break-word;
+		}
+
+		// 绘制聊天气泡的三角形
+		&::after,
+		&::before {
+			border-bottom: 5px solid transparent;
+			border-right: 14px solid $boxBackground;
+			bottom: -4px;
+			right: 3px;
+			content: '';
+			position: absolute;
+		}
+		&::before {
+		    border-right: 16px solid $boxBorderColor;
+		    right: 2px;
+		    bottom: -5px;
+		}
+
+	}
+}

@@ -69,7 +69,7 @@ function jx_wcc_reset () {
 
 		'favLink' => array (
 			'回到首页' => site_url(),
-			'集训的二次元仓库' => 'http://jixun.org/'
+			'二次元仓库' => 'http://jixun.org/'
 		),
 
 		'skin' => plugins_url('/skin/' , __FILE__),
@@ -163,7 +163,7 @@ function jx_chuncai_save_opts () {
 function jx_chuncai_enqueue () {
 	global $jx_opt_wcc;
 	wp_enqueue_style  ('jx-chuncai-style' , plugins_url('/res/wcc.css', __FILE__));
-	wp_enqueue_script ('jx-chuncai-script', plugins_url('/res/wcc.js' , __FILE__), array ('jquery'));
+	wp_enqueue_script ('jx-chuncai-script', plugins_url('/res/wcc' . __jx_wcc_min . '.js' , __FILE__), array ('jquery'));
 	wp_localize_script('jx-chuncai-script', 'jx_wcc', array(
 		'url' => admin_url('admin-ajax.php'),
 		'skin' => plugins_url('/skin/' , __FILE__)
@@ -191,7 +191,6 @@ function jx_admin_page_enqueue ($hook) {
 						plugins_url('/res/wcc-admin' . __jx_wcc_min . '.js' , __FILE__), 
 						array ('jquery-chosen', 'jquery'));
 
-	wp_enqueue_style  ('jx-chuncai-admin-style', 
-						plugins_url('/res/wcc-admin' . __jx_wcc_min . '.css', __FILE__));
+	wp_enqueue_style  ('jx-chuncai-admin-style', plugins_url('/res/wcc-admin.css', __FILE__));
 }
 add_action ('admin_enqueue_scripts', 'jx_admin_page_enqueue');
