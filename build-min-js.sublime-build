@@ -1,0 +1,6 @@
+# You need to modify the `/path/to/closure/compiler` to the jar file and `path` to the java path.
+{
+	"shell_cmd": "java -jar /path/to/closure/compiler '$file' --define='DEBUG=false' --compilation_level SIMPLE_OPTIMIZATIONS --js_output_file '$file_path/$file_base_name.min.js'",
+	"selector": "source.js",
+	"path": "/usr/bin"
+}
