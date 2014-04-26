@@ -7,7 +7,7 @@
 // wcc.js
 ;jQuery (function ($) {
 	// Change to false when release to public.
-	var DEBUG = true;
+	var DEBUG = false;
 
 	var w = window;
 	var jx_wcc = w.jx_wcc;

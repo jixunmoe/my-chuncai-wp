@@ -1,9 +1,9 @@
 <?php defined ('ABSPATH') || exit ;
 /*
  * Plugin Name: 自制伪春菜
- * Plugin URI:  http://jixun.org/
- * Description: 没事
-做 * Version:     1.0
+ * Plugin URI:  https://github.com/JixunMoe/my-chuncai-wp
+ * Description: 又一个伪春菜插件, 其项目托管于 <a href="https://github.com/JixunMoe/my-chuncai-wp" target="_blank">GitHub</a>。
+ * Version:     1.0-Alpha
  * Author:      Jixun
  * Author URI:  http://jixun.org/
  */
@@ -23,7 +23,9 @@ function jx_wcc_options () {
 add_action('admin_menu', 'jx_wcc_options');
 function jx_wcc_row_meta ($meta, $file) {
 	if (__jx_wcc_base === $file) {
-		$meta[] = '<a href="options-general.php?page=jx_wcc_options">' . __jx_wcc('配置春菜') . '</a>';
+		array_splice ($meta, 2, 0, array(
+			'<a href="options-general.php?page=jx_wcc_options">' . __jx_wcc('配置春菜') . '</a>'
+		));
 	}
 	return $meta;
 }
@@ -172,7 +174,7 @@ function jx_chuncai_enqueue () {
 add_action ('wp_enqueue_scripts', 'jx_chuncai_enqueue');
 
 /**
- * AJAX: Return ajax 
+ * AJAX: Returns the config of this plugin. 
  * @return None
  */
 function jx_ajax_get_chuncai_opts () {
