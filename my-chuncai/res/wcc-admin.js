@@ -1,6 +1,9 @@
 // wcc-admin.js
 
 ;jQuery (function ($) {
+	// Change to false when release to public.
+	var DEBUG = false;
+	
 	var placeholder = 'placeholder';
 
 	$('.chz').each(function (){
@@ -21,14 +24,14 @@
 		tts = $('div[tts]');
 	
 	var addTTS = function (t, q) {
-		console.log (t,q);
+		DEBUG && console.log (t,q);
 		t.append(
 			$('<div>')
 			.append ($('<input>').val(q).attr(placeholder, t.attr('ph')).attr('name', t.attr('name')).addClass('w25em mag-right v'))
 			.append ($('<button>').text('移除').addClass('button btn-remove-row'))
 		);
 	}, addCq = function (cqa, w, e, q, a) {
-		console.log (arguments);
+		DEBUG && console.log (arguments);
 		cqa.append(
 			$('<div>')
 			.append (
@@ -84,22 +87,19 @@
 		addTTS($(this).prev());
 	});
 
-	// Bypass PHP Magic Quote.
-	var stringify = function (arr) {
-		return encodeURIComponent(JSON.stringify(arr));
+	var genJSON = function (cqid) {
+		var r = {};
+		$('[cqid="' + cqid + '"]>div').each(function () {
+			r[$('.q', this).val()] = $('.a', this).val();
+		});
+		// Bypass PHP Magic Quote.
+		return encodeURIComponent(JSON.stringify(r));
 	};
 
 	$('#jx_wcc_admin').on('submit', function (e) {
-		var r = {}, w = {}, randTalk = [];
-		$('[cqid="qa"]>div').each(function () {
-			r[$('.q', this).val()] = $('.a', this).val();
-		});
-		this.qa.value = stringify(r);
-
-		$('[cqid="fp"]>div').each(function () {
-			w[$('.q', this).val()] = $('.a', this).val();
-		});
-		this.feedPlay.value = stringify(w);
+		this.qa.value = genJSON('qa');
+		this.feedPlay.value = genJSON('fp');
+		this.favLink.value = genJSON('fl');
 
 //		e.preventDefault();
 	});

@@ -98,7 +98,7 @@ function jx_wcc_options_page () {
 				$jx_opt_wcc[$key] = @$_POST[$key];
 
 			// 解析 json
-			foreach (array('qa', 'randTalk', 'feedPlay') as $key) {
+			foreach (array('qa', 'randTalk', 'feedPlay', 'favLink') as $key) {
 				$tmp = json_decode(urldecode(@$_POST[$key]), true);
 				// 防止未知问题造成的覆盖原值
 				if ($tmp && is_array($tmp)) {
