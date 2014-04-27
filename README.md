@@ -21,5 +21,17 @@
 * 前台多语言
 * 后台多语言
 
+## 可移除文件
+下列开发用文件可以从服务器上移除。
+
+```
+my-chuncai
+├── res
+│   ├── wcc-admin.js
+│   ├── wcc-admin.scss
+│   ├── wcc.js
+│   ├── wcc.scss
+```
+
 ## IE 警告:
 该插件不支援 IE 1~7, 因为使用到了 localStorage API.

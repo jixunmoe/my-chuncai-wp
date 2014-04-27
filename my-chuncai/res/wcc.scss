@@ -4,6 +4,16 @@
 $boxBorderColor: rgb(255, 90, 119);
 $boxBackground : rgb(255, 255, 238);
 
+.jx_wcc_main,
+.jx_wcc_btn_shoukan {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
 // 关闭春菜后的召唤按钮
 .jx_wcc_btn_shoukan {
 	position: fixed;
