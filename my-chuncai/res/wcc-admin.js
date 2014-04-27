@@ -3,7 +3,7 @@
 ;jQuery (function ($) {
 	// Change to false when release to public.
 	var DEBUG = false;
-	
+
 	var placeholder = 'placeholder';
 
 	$('.chz').each(function (){

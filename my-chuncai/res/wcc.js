@@ -331,14 +331,15 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 				cb (imgCache[srcImg], srcImg);
 				return ;
 			}
-			_timg[0].onload = function () {
+			var timg = _timg[0];
+			timg.onload = function () {
 				imgCache[srcImg] = {
-					w: _timg.width(),
-					h: _timg.height()
+					w: timg.width,
+					h: timg.height
 				};
 				cb (imgCache[srcImg], srcImg);
 			};
-			_timg.attr('src', srcImg);
+			timg.src = srcImg;
 		};
 
 		var _expThread = 0,
