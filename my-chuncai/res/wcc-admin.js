@@ -58,7 +58,7 @@ jQuery (function ($) {
 	};
 
 	var addCqW = {
-		qa: ['问答', ['问点什么呢?', '怎么回答呢?']],
+		// qa: ['问答', ['问点什么呢?', '怎么回答呢?']],
 		fp: ['吃答', ['吃什么好呢?', '然后怎么回应?']],
 		fl: [['名', '地址'], ['如: xxx 的博客', '如: http://example.com/']]
 	};
@@ -97,7 +97,7 @@ jQuery (function ($) {
 	};
 
 	$('#jx_wcc_admin').on('submit', function (e) {
-		this.qa.value = genJSON('qa');
+		// this.qa.value = genJSON('qa');
 		this.feedPlay.value = genJSON('fp');
 		this.favLink.value = genJSON('fl');
 
