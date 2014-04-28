@@ -52,7 +52,7 @@
 				<p class="description">用户初次访问显示的春菜。</p>
 			</td>
 		</tr>
-
+<?php /*
 		<tr>
 			<th><label for="btn-add-cpa">春菜问答</label></th>
 			<td>
@@ -69,7 +69,7 @@
 				<p class="description">当用户聊天输入了无匹陪的数据应该回应的数据。</p>
 			</td>
 		</tr>
-
+*/ ?>
 		<tr>
 			<th><label for="btn-add-tts">自言自语</label></th>
 			<td>

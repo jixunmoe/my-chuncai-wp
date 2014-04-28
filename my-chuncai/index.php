@@ -41,7 +41,7 @@ function jx_wcc_reset () {
 	global $jx_opt_wcc;
 	$jx_opt_wcc = array(
 		'announcement' => '这位客官, 欢迎光临小站~~',
-
+/*
 		// Default Q&A
 		'qa' => array(
 			'早上好' => '早上好~',
@@ -49,6 +49,8 @@ function jx_wcc_reset () {
 			'金坷垃' => '每天一袋金坷拉, 喵喵亩产一千八'
 		),
 
+		'defAnswer' => '... 嗯 ?',
+*/
 		// 时间戳: 当前的时间戳, 前台计算时间用.
 		'since' => time(),
 
@@ -66,7 +68,8 @@ function jx_wcc_reset () {
 			'咦你想做什么 oAo',
 			'「不要啊」你以为我会这么说么噗噗~',
 			'一起组团烧烤秋刀鱼',
-			'白日依山尽，黄河入海流，欲穷千里目，更上 .. .. 一层楼？'
+			'白日依山尽，黄河入海流，欲穷千里目，更上 .. .. 一层楼？',
+			'啊啦今天想吃点什么呢~'
 		),
 
 		'favLink' => array (
@@ -74,9 +77,7 @@ function jx_wcc_reset () {
 			'二次元仓库' => 'http://jixun.org/'
 		),
 
-		'skin' => plugins_url('/skin/' , __FILE__),
-
-		'defAnswer' => '... 嗯 ?'
+		'skin' => plugins_url('/skin/' , __FILE__)
 	);
 
 	jx_wcc_reqUpdate ();

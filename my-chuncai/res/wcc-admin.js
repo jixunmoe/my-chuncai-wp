@@ -1,6 +1,6 @@
 // wcc-admin.js
 
-;jQuery (function ($) {
+jQuery (function ($) {
 	// Change to false when release to public.
 	var DEBUG = false;
 
@@ -24,14 +24,14 @@
 		tts = $('div[tts]');
 	
 	var addTTS = function (t, q) {
-		DEBUG && console.log (t,q);
+		if (DEBUG) console.log (t,q);
 		t.append(
 			$('<div>')
 			.append ($('<input>').val(q).attr(placeholder, t.attr('ph')).attr('name', t.attr('name')).addClass('w25em mag-right v'))
 			.append ($('<button>').text('移除').addClass('button btn-remove-row'))
 		);
 	}, addCq = function (cqa, w, e, q, a) {
-		DEBUG && console.log (arguments);
+		if (DEBUG) console.log (arguments);
 		cqa.append(
 			$('<div>')
 			.append (
@@ -54,7 +54,7 @@
 			)
 
 			.append ('<br>')
-		)
+		);
 	};
 
 	var addCqW = {

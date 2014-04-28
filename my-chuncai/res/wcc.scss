@@ -62,9 +62,11 @@ $boxBackground : rgb(255, 255, 238);
 		// 让空链接看上去能点
 		a {
 			cursor: pointer;
+			text-decoration: none;
 		}
 		// Menu
 		> .jx_wcc_ment_btn {
+			margin-top: .3em;
 			cursor: pointer;
 			text-align: right;
 			padding: 0 0.3em 2px;

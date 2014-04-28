@@ -5,7 +5,7 @@
  */
 
 // wcc.js
-;jQuery (function ($) {
+jQuery (function ($) {
 	// Change to false when release to public.
 	var DEBUG = false;
 
@@ -32,21 +32,20 @@
 				newArgs.push (arguments[i]);
 
 			return foo.apply (that, newArgs);
-		}
+		};
 	};
 
 // http://jixun.org/p/2583
 var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
-    if (!canMoveCB) canMoveCB = function () {return true};
+    if (!canMoveCB) canMoveCB = function () {return true; };
     var _that = this;
     var _that_q = dragElement;
     var _that_p = resultElement || dragElement;
     var _that_b = _that_p.parentNode;
  
     var _that_getPos = function (ele) {
-        var addOn = ele.offsetParent != _that_b && ele.offsetParent
-            ? _that_getPos (ele.offsetParent)
-            : {x: 0, y: 0};
+        var addOn = ele.offsetParent != _that_b && ele.offsetParent ?
+            _that_getPos (ele.offsetParent) : {x: 0, y: 0};
  
         return {
             x: ele.offsetLeft + addOn.x,
@@ -65,11 +64,10 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
     var _that_offset = {x: 0, y: 0};
     var _that_baseOffset = {x: 0, y: 0};
     var isOurEvent = function (e) {
-    	return e && e.parentNode
-		    	? _that_p == e
-		    		? true
-		    		: isOurEvent (e.parentNode)
-		    	: false;
+		return e && e.parentNode ?
+			  _that_p == e ?
+				true : isOurEvent (e.parentNode)
+			: false;
     };
     var _that_mousedown = function (e) {
         if (!isOurEvent(e.target) || !canMoveCB(e)) return;
@@ -113,7 +111,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 
 	var getRanArr = function (arr) { return arr[Math.floor(Math.random() * arr.length)]; };
 	var clsWCC = function (opts) {
-		DEBUG && console.log (opts);
+		if (DEBUG) console.log (opts);
 		var conf = opts.c;
 		var _getBody = function () {
 			if (opts.wcc_enable.indexOf(conf.body) !== -1)
@@ -132,7 +130,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 
 		var _bootup = function () {
 			_shutdown (); // Clean up
-			DEBUG && console.log ('Booting up...');
+			if (DEBUG) console.log ('Booting up...');
 			// Shoukan btn
 			_btn_shoukan.stop().fadeOut (600);
 			_main.fadeIn ();
@@ -144,7 +142,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			_reloadFace (true);
 		};
 		var _shutdown = function (spd) {
-			DEBUG && console.log ('Shutting down...');
+			if (DEBUG) console.log ('Shutting down...');
 			_main.hide ();
 			clearTimeout (_expThread);
 			clearTimeout (_thdReloadFace);
@@ -153,7 +151,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 
 		var _save = function () {
 			localStorage.jx_wcc_conf = JSON.stringify(conf);
-			DEBUG && console.log ('Save config: %s', localStorage.jx_wcc_conf);
+			if (DEBUG) console.log ('Save config: %s', localStorage.jx_wcc_conf);
 		};
 		var _curFace = 0;
 		// 随机抽取一只表情
@@ -219,13 +217,15 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 				_addDelay (5000);
 				doTypeWords(opts.announcement);
 			}),
+			/*
 			$(newLink).text('你问我答').click(function () {
 				// TODO
 			}),
+			*/
 			$(newLink).text('存活时间').click(function () {
 				_hideMenu ();
 				_addDelay (5000);
-				doTypeWords('咱已经和主人共同度过 ' + Math.floor((new Date() / 1000 - opts.since) / 86400) + '天 了哦～');
+				doTypeWords('咱已经和主人共同度过了 ' + Math.floor((new Date() / 1000 - opts.since) / 86400) + '天 的人生了哦~   我是不是很棒呢~');
 			}),
 			$(newLink).text('拍打喂食').click(function () {
 				// TODO
@@ -242,6 +242,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			$(newLink).text('传 送 门').click(function () {
 				_addDelay(15000);
 				_hideMenu ();
+				doTypeWords ('想到哪里去呢?');
 				_menu_links.slideDown ();
 			}),
 			$(newLink).text('关闭春菜').click(_closeChunCai),
@@ -261,7 +262,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 					_feedCount--;
 
 				setTimeout (_feedClrThd, 420000);
-			}
+			};
 
 		// 菜单
 		var _menu = $(newDiv).appendTo(_chat).append(_menus).addClass('jx_wcc_chat_m').hide();
@@ -311,7 +312,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		var _exp  = $('<img>').appendTo (_face).hide();
 
 		var _drag = new jDrag (_face[0], _main[0], null, function (newPos) {
-			DEBUG && console.log ('Save new pos:', newPos);
+			if (DEBUG) console.log ('Save new pos:', newPos);
 			conf.pos = newPos;
 			_save ();
 		});
@@ -347,7 +348,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
     
 		var __typeClass = 'jx-jqfx-type';
 		var doTypeWords = function (str, cb, delay) {
-			DEBUG && console.log ('doTypeWords: %s', str);
+			if (DEBUG) console.log ('doTypeWords: %s', str);
 			// Destory previous session if present.
 			clearTimeout (_chat_content.data(__typeClass));
 
@@ -359,7 +360,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 
 				if (++strPos < strLen) {
 					// This effect isn't done yet.
-					_chat_content.data (__typeClass, setTimeout(typeStrCallback, delay || 20));
+					_chat_content.data (__typeClass, setTimeout(typeStrCallback, delay || 35));
 				} else if (cb) {
 					cb ();
 				}
@@ -427,7 +428,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		var _reloadFace = function (bForce) {
 			// Remove old thread if there is any.
 			clearTimeout (_thdReloadFace);
-			DEBUG && console.log('_extendDelay: %s', _extendDelay);
+			if (DEBUG) console.log('_extendDelay: %s', _extendDelay);
 			if (!bForce && _extendDelay) {
 				_thdReloadFace = setTimeout(_reloadFace, _extendDelay);
 				_extendDelay = 0;
@@ -470,7 +471,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		}
 
 		// 初始化友情链接
-		for (var x in opts.favLink) {
+		for (x in opts.favLink) {
 			_menu_links.append($(newLink).text(x).attr('href', opts.favLink[x]));
 		}
 
@@ -482,8 +483,13 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		// 重载人偶
 		_reloadFace ();
 
-		if (conf.hide)
+		if (conf.hide) {
 			_shutdown (true);
+		} else {
+			_reloadChat (true);
+			_setDelay (3000);
+			doTypeWords ( opts.announcement );
+		}
 
 		//:EOF
 	};
