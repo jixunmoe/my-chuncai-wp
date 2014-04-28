@@ -95,11 +95,11 @@ function jx_wcc_options_page () {
 			jx_wcc_reset ();
 		} else {
 			// 纯文本, 或原生数组
-			foreach (array('announcement', 'skin', 'defAnswer', 'since', 'wcc_default', 'wcc_enable') as $key)
+			foreach (array('announcement', 'skin', 'since', 'wcc_default', 'wcc_enable') as $key)
 				$jx_opt_wcc[$key] = @$_POST[$key];
 
 			// 解析 json
-			foreach (array('qa', 'randTalk', 'feedPlay', 'favLink') as $key) {
+			foreach (array('randTalk', 'feedPlay', 'favLink') as $key) {
 				$tmp = json_decode(urldecode(@$_POST[$key]), true);
 				// 防止未知问题造成的覆盖原值
 				if ($tmp && is_array($tmp)) {
