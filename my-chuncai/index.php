@@ -95,11 +95,11 @@ function jx_wcc_options_page () {
 			jx_wcc_reset ();
 		} else {
 			// 纯文本, 或原生数组
-			foreach (array('announcement', 'skin', 'since', 'wcc_default', 'wcc_enable') as $key)
+			foreach (array('announcement', 'skin', 'since', 'wcc_default', 'wcc_enable', 'randTalk') as $key)
 				$jx_opt_wcc[$key] = @$_POST[$key];
 
 			// 解析 json
-			foreach (array('randTalk', 'feedPlay', 'favLink') as $key) {
+			foreach (array('feedPlay', 'favLink') as $key) {
 				$tmp = json_decode(urldecode(@$_POST[$key]), true);
 				// 防止未知问题造成的覆盖原值
 				if ($tmp && is_array($tmp)) {
@@ -110,7 +110,7 @@ function jx_wcc_options_page () {
 			jx_chuncai_save_opts ();
 		}
 	}
-	include_once (dirname(__FILE__) . '/options.php');
+	include_once dirname(__FILE__) . '/options.php';
 }
 
 
@@ -132,7 +132,7 @@ function jx_wcc_reqUpdate () {
  * Echo an option.
  * @param  String $optname The name of the option.
  * @param  String $sub     The name of the sub-option (Optional).
- * @return None
+ * @return null
  */
 function _jx_chuncai_get_opt ($optname, $sub = null) {
 	echo (esc_attr(jx_chuncai_get_opt ($optname, $sub)));
@@ -152,7 +152,7 @@ function jx_chuncai_get_opt ($optname, $sub = null) {
 
 /**
  * Save all chuncai options.
- * @return None
+ * @return null
  */
 function jx_chuncai_save_opts () {
 	global $jx_opt_wcc;
@@ -161,10 +161,9 @@ function jx_chuncai_save_opts () {
 
 /**
  * Enqueue style and script for wcc.
- * @return None
+ * @return null
  */
 function jx_chuncai_enqueue () {
-	global $jx_opt_wcc;
 	wp_enqueue_style  ('jx-chuncai-style' , plugins_url('/res/wcc.css', __FILE__));
 	wp_enqueue_script ('jx-chuncai-script', plugins_url('/res/wcc' . __jx_wcc_min . '.js' , __FILE__), array ('jquery'));
 	wp_localize_script('jx-chuncai-script', 'jx_wcc', array(
@@ -176,7 +175,7 @@ add_action ('wp_enqueue_scripts', 'jx_chuncai_enqueue');
 
 /**
  * AJAX: Returns the config of this plugin. 
- * @return None
+ * @return null
  */
 function jx_ajax_get_chuncai_opts () {
 	global $jx_opt_wcc;
