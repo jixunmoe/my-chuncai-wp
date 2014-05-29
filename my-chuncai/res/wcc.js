@@ -4,6 +4,27 @@
  *   https://github.com/JixunMoe/my-chuncai-wp
  */
 
+/**
+ * Namespaces to reduce code warning in phpStorm
+ * @namespace w.jx_wcc
+ * @namespace _wcc.faces
+ * @namespace _curFace.base
+ *
+ * Image width and height
+ * @namespace s.w
+ * @namespace s.h
+ *
+ * Options
+ * @namespace opts.announcement
+ * @namespace opts.wcc_enable
+ * @namespace opts.wcc
+ * @namespace opts.since
+ * @namespace opts.randTalk
+ * @namespace opts.skin
+ * @namespace opts.feedPlay
+ * @namespace opts.favLink
+*/
+
 // wcc.js
 jQuery (function ($) {
 	// Change to false when release to public.
@@ -21,25 +42,10 @@ jQuery (function ($) {
 		// IE, just go hell.
 		return ;
 
-	var createCallback = function (that, foo) {
-		that = that || this;
-		for (var i=2, args = []; i<arguments.length; i++) {
-			args.push (arguments[i]);
-		}
-
-		return function () {
-			for (var i=0, newArgs = args; i<arguments.length; i++)
-				newArgs.push (arguments[i]);
-
-			return foo.apply (that, newArgs);
-		};
-	};
-
 // http://jixun.org/p/2583
 var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
     if (!canMoveCB) canMoveCB = function () {return true; };
-    var _that = this;
-    var _that_q = dragElement;
+	var _that_q = dragElement;
     var _that_p = resultElement || dragElement;
     var _that_b = _that_p.parentNode;
  
@@ -57,10 +63,6 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
     var _that_bind = function (event, cb, isDoc) {
         (isDoc ? document : _that_q).addEventListener (event, cb, false);
     };
-    _that_unbind = function (event, cb, isDoc) {
-        (isDoc ? document : _that_q).removeEventListener (event, cb, false);
-    };
-    
     var _that_offset = {x: 0, y: 0};
     var _that_baseOffset = {x: 0, y: 0};
     var isOurEvent = function (e) {
@@ -128,7 +130,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		// 首先, 读取设定
 		var wccName, _wcc;
 
-		var _bootup = function () {
+		var _bootUp = function () {
 			_shutdown (); // Clean up
 			if (DEBUG) console.log ('Booting up...');
 			// Shoukan btn
@@ -141,7 +143,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			_hideMenu ();
 			_reloadFace (true);
 		};
-		var _shutdown = function (spd) {
+		var _shutdown = function () {
 			if (DEBUG) console.log ('Shutting down...');
 			_main.hide ();
 			clearTimeout (_expThread);
@@ -166,7 +168,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			top:  conf.pos.y
 		});
 		var _btn_shoukan = $(newLink).appendTo('body').addClass('jx_wcc_btn_shoukan').text('召唤春菜').hide().click(function () {
-			_bootup ();
+			_bootUp ();
 			conf.hide = false;
 			_save ();
 		});
@@ -191,7 +193,6 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 					.stop().slideUp();
 		};
 
-		var _shoukanBtn   = $(newLink).text();
 		var _closeChunCai = function () {
 			_hideMenu ();
 			_setDelay (10000);
@@ -217,18 +218,12 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 				_addDelay (5000);
 				doTypeWords(opts.announcement);
 			}),
-			/*
-			$(newLink).text('你问我答').click(function () {
-				// TODO
-			}),
-			*/
 			$(newLink).text('存活时间').click(function () {
 				_hideMenu ();
 				_addDelay (5000);
 				doTypeWords('咱已经和主人共同度过了 ' + Math.floor((new Date() / 1000 - opts.since) / 86400) + '天 的人生了哦~   我是不是很棒呢~');
 			}),
 			$(newLink).text('拍打喂食').click(function () {
-				// TODO
 				_addDelay(15000);
 				doTypeWords('要来点什么呢~');
 				_menu.slideToggle ();
@@ -284,15 +279,15 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			_feedCount ++;
 			doTypeWords((pre + ' ' + $(this).attr('r')).trim());
 		});
+
 		var _menu_change = $(newDiv).appendTo(_chat).addClass('jx_wcc_chat_m').hide().clickEx('a', function () {
 			conf.body = $(this).attr('m');
 			_save ();
-			_bootup ();
+			_bootUp ();
 		});
 		var _menu_links = $(newDiv).appendTo(_chat).addClass('jx_wcc_chat_m').hide();
 
-		var _chatLock = false;
-		var _menu_btn = $(newDiv).appendTo(_chat).click(function () {
+		$(newDiv).appendTo(_chat).click(function () {
 			// Menu Button click event
 			if (_menu.is(':hidden')) {
 				_hideMenu ();
@@ -306,12 +301,12 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 			}
 		}).text('menu').addClass ('jx_wcc_ment_btn');
 
-		// _timg: 用来测量图片大小
-		var _timg = $('<img>').appendTo (_face).hide();
+		// _tImage: 用来测量图片大小
+		var _tImage = $('<img>').appendTo (_face).hide();
 
 		var _exp  = $('<img>').appendTo (_face).hide();
 
-		var _drag = new jDrag (_face[0], _main[0], null, function (newPos) {
+		new jDrag (_face[0], _main[0], null, function (newPos) {
 			if (DEBUG) console.log ('Save new pos:', newPos);
 			conf.pos = newPos;
 			_save ();
@@ -332,7 +327,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 				cb (imgCache[srcImg], srcImg);
 				return ;
 			}
-			var timg = _timg[0];
+			var timg = _tImage[0];
 			timg.onload = function () {
 				imgCache[srcImg] = {
 					w: timg.width,
@@ -414,7 +409,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		};
 
 		var _loadExp = function (bForce) {
-			getImgSize(_buildImg(_curFace.base), function (baseImgSize, baseImgSrc) {
+			getImgSize(_buildImg(_curFace.base, 0), function (baseImgSize, baseImgSrc) {
 				setFaceAndSize (baseImgSize, baseImgSrc);
 
 				_expIndex = _expFaces.length;
@@ -448,7 +443,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 				_loadExp (bForce);
 			} else {
 				// 没有表情, 测量图片大小
-				getImgSize(_buildImg(_curFace), function (size, srcImg) {
+				getImgSize(_buildImg(_curFace, 0), function (size, srcImg) {
 					setFaceAndSize (size, srcImg);
 					_thdReloadFace = setTimeout  (_reloadFace, _nextReloadTime);
 					_reloadChat ();
@@ -458,11 +453,13 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 
 		// 初始化喂食选项
 		for (var x in opts.feedPlay) {
-			var f = opts.feedPlay[x];
-			_menu_feedPlay.append ($(newLink).text(x).attr({
-				f: x,
-				r: f
-			}));
+			if (opts.feedPlay.hasOwnProperty(x)) {
+				var f = opts.feedPlay[x];
+				_menu_feedPlay.append ($(newLink).text(x).attr({
+					f: x,
+					r: f
+				}));
+			}
 		}
 
 		// 初始化春菜更换选项
@@ -472,10 +469,12 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 
 		// 初始化友情链接
 		for (x in opts.favLink) {
-			_menu_links.append($(newLink).text(x).attr('href', opts.favLink[x]));
+			if (opts.favLink.hasOwnProperty(x)) {
+				_menu_links.append($(newLink).text(x).attr('href', opts.favLink[x]));
+			}
 		}
 
-		_bootup ();
+		_bootUp ();
 
 		// 清理饥饿度
 		_feedClrThd ();
@@ -484,7 +483,7 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 		_reloadFace ();
 
 		if (conf.hide) {
-			_shutdown (true);
+			_shutdown ();
 		} else {
 			_reloadChat (true);
 			_setDelay (3000);
@@ -509,7 +508,8 @@ var jDrag = function (dragElement, resultElement, canMoveCB, updateMoveCB) {
 				x: $(w).width()  - 120,
 				y: $(w).height() - 200
 			},
-			hide: false
+			// 初次访问, 如果为小屏幕 (Twitter Bootstrap 定义为 [宽度 < 768px]) 则默认隐藏。
+			hide: $(window).height() < 768
 		}}, r));
 	});
 });
