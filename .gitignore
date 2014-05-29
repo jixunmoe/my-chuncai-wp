@@ -4,5 +4,6 @@
 *.sublime-workspace
 *.sublime-project
 .sass-cache
+.idea
 
 pack-release
